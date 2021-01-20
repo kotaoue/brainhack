@@ -133,10 +133,6 @@
 			render();
 		}
 
-		function radian(angle) {
-			return angle * Math.PI / 180;
-		}
-
 		function render() {
 			cameraMove();
 			renderer.render(scene, camera);
@@ -144,6 +140,10 @@
 			if ((move.current * move.increment) <= 1) {
 				move.current++;
 			}
+		}
+
+		function radian(angle) {
+			return angle * Math.PI / 180;
 		}
 
 		function cameraMove() {
@@ -158,11 +158,6 @@
 			const beforePos = new THREE.Vector3(beforeX, 0, beforeZ);
 			const afterPos = new THREE.Vector3(afterX, 0, afterZ);
 			camera.position.copy(beforePos.lerp(afterPos, move.current * move.increment));
-
-
-			console.log(beforePos);
-			console.log(afterPos);
-
 			camera.lookAt(cameraTarget);
 		}
 
