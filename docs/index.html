@@ -47,11 +47,10 @@
 			// Add Camera.
 			camera = new THREE.PerspectiveCamera(35, window.innerWidth / window.innerHeight, 1, 20);
 			cameraTarget = new THREE.Vector3(0, 0, 0);
-			camera.position.set(0, 0, 0);
 
 			// Add Scene.
 			scene = new THREE.Scene();
-			scene.background = new THREE.Color(0xffffff);
+			scene.background = new THREE.Color(0x0000);
 
 			// Add Model.
 			addModel(scene);
