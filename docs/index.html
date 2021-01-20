@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>three.js webgl - STL</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+	<link type="text/css" rel="stylesheet" href="main.css">
+	<link rel="preconnect" href="https://fonts.gstatic.com">
+	<link href="https://fonts.googleapis.com/css2?family=Sawarabi+Mincho&display=swap" rel="stylesheet">
+</head>
+
+<body>
+	<div id="slide"></div>
+	<script type="module">
+		import * as THREE from './build/three.module.js';
+		import Stats from './jsm/libs/stats.module.js';
+		import { STLLoader } from './jsm/loaders/STLLoader.js';
+
+		let container, stats;
+		let camera, cameraTarget, scene, renderer;
+		let cameraLength = 15;
+
+		let startPos;
+		let page = 0;
+		let moveRatio = 0;
+		let brain;
+
+		let contents = [
+			{ content: '1' },
+			{ content: '2' },
+			{ content: '3' },
+			{ content: '4' },
+			{ content: '5' },
+			{ content: '6' },
+			{ content: '7' },
+			{ content: 'https://github.com/kotaoue/brainhack' },
+		];
+
+		init();
+		animate();
+		slides();
+
+		function init() {
+			// Add Container.
+			container = document.createElement('div');
+			document.body.appendChild(container);
+
+			// Add Camera.
+			camera = new THREE.PerspectiveCamera(35, window.innerWidth / window.innerHeight, 1, 20);
+			cameraTarget = new THREE.Vector3(0, 0, 0);
+			camera.position.set(0, 0, cameraLength);
+			startPos = camera.position;
+
+			// Add Scene.
+			scene = new THREE.Scene();
+			scene.background = new THREE.Color(0xffffff);
+			scene.fog = new THREE.Fog(0x000000, 0, 25);
+
+			// Add Model.
+			addModel(scene);
+
+			// Add Lights.
+			scene.add(new THREE.HemisphereLight());
+			addShadowedLight(-10, 25, 10, 0xffffff, 1);
+
+			// Renderer
+			renderer = new THREE.WebGLRenderer({ antialias: true });
+			renderer.setPixelRatio(window.devicePixelRatio);
+			renderer.setSize(window.innerWidth, window.innerHeight);
+			renderer.outputEncoding = THREE.sRGBEncoding;
+			renderer.shadowMap.enabled = true;
+
+			container.appendChild(renderer.domElement);
+
+			// Add EvnetListner.
+			window.addEventListener('resize', onWindowResize, false);
+			document.addEventListener('keydown', onKeyDown);
+		}
+
+		function addModel(scene) {
+			const scale = 0.03;
+			const loader = new STLLoader();
+			loader.load('./models/EGJ_brain.stl', function (geometry) {
+				const material = new THREE.MeshPhongMaterial({ color: 0x0e68ab, specular: 0xb3ceea });
+				const mesh = new THREE.Mesh(geometry, material);
+
+				mesh.position.set(0, 0, 0);
+				mesh.scale.set(scale, scale, scale);
+				mesh.rotation.set(Math.PI / 2, Math.PI, 0);
+
+				mesh.castShadow = true;
+				mesh.receiveShadow = true;
+
+				scene.add(mesh);
+
+				brain = mesh;
+			});
+		}
+
+		function addShadowedLight(x, y, z, color, intensity) {
+			const directionalLight = new THREE.DirectionalLight(color, intensity);
+			directionalLight.position.set(x, y, z);
+			scene.add(directionalLight);
+
+			directionalLight.castShadow = true;
+		}
+
+		function onWindowResize() {
+			camera.aspect = window.innerWidth / window.innerHeight;
+			camera.updateProjectionMatrix();
+
+			renderer.setSize(window.innerWidth, window.innerHeight);
+		}
+
+		function onKeyDown(event) {
+			const DOM_VK_J = 74;
+			const DOM_VK_K = 75;
+
+			if (event.keyCode === DOM_VK_K && page > 0) {
+				page--;
+			}
+			if (event.keyCode === DOM_VK_J && page < contents.length - 1) {
+				page++;
+			}
+
+			// ページ切り替え
+			startPos = camera.position;  //開始位置
+			moveRatio = 0;
+			slides();
+		}
+
+		function animate() {
+			requestAnimationFrame(animate);
+			render();
+		}
+
+		function radian(angle) {
+			return angle * Math.PI / 180;
+		}
+
+		function render() {
+			const beforeR = radian(page * 15)
+			const afterR = radian((page + 1) * 15)
+			const beforeX = cameraLength * Math.sin(beforeR);
+			const beforeZ = cameraLength * Math.cos(beforeR);
+			const afterX = cameraLength * Math.sin(afterR);
+			const afterZ = cameraLength * Math.cos(afterR);
+
+			camera.position.x = beforeX;
+			camera.position.z = beforeZ;
+
+			camera.lookAt(cameraTarget);
+			renderer.render(scene, camera);
+
+			// brain.rotation.y += 0.01;
+
+			moveRatio += 0.1;
+		}
+
+
+		function pageDetail() {
+			camera.position.copy(startPos.lerp(new THREE.Vector3(10, 0, 15), moveRatio * 0.02));
+		}
+
+
+		function slides() {
+			document.getElementById("slide").innerHTML = "<p class='text'>" + contents[page].content + "</p>";
+		}
+	</script>
+</body>
+
+</html>
