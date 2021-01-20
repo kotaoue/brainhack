@@ -118,14 +118,14 @@
 
 			if (event.keyCode === DOM_VK_K && page > 0) {
 				page--;
+				move.current = 0;
+				slides();
 			}
 			if (event.keyCode === DOM_VK_J && page < contents.length - 1) {
 				page++;
+				move.current = 0;
+				slides();
 			}
-
-			// ページ切り替え
-			move.current = 0;
-			slides();
 		}
 
 		function animate() {
