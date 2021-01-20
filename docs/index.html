@@ -147,8 +147,10 @@
 			const afterX = cameraLength * Math.sin(afterR);
 			const afterZ = cameraLength * Math.cos(afterR);
 
-			camera.position.x = beforeX;
-			camera.position.z = beforeZ;
+			const beforePos = new THREE.Vector3(beforeX, 0, beforeZ);
+			const afterPos = new THREE.Vector3(afterX, 0, afterZ);
+			camera.position.copy(beforePos.lerp(afterPos, moveRatio * 0.02));
+
 
 			camera.lookAt(cameraTarget);
 			renderer.render(scene, camera);
@@ -158,7 +160,6 @@
 
 
 		function pageDetail() {
-			camera.position.copy(startPos.lerp(new THREE.Vector3(10, 0, 15), moveRatio * 0.02));
 		}
 
 
