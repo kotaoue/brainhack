@@ -21,10 +21,10 @@
 		let camera, cameraTarget, scene, renderer;
 		let cameraLength = 15;
 
-		let startPos;
-		let page = 0;
-		let moveRatio = 0;
 		let brain;
+
+		let page = 0;
+		let move = { current: 0, increment: 0.02 };
 
 		let contents = [
 			{ content: '1' },
@@ -49,8 +49,7 @@
 			// Add Camera.
 			camera = new THREE.PerspectiveCamera(35, window.innerWidth / window.innerHeight, 1, 20);
 			cameraTarget = new THREE.Vector3(0, 0, 0);
-			camera.position.set(0, 0, cameraLength);
-			startPos = camera.position;
+			camera.position.set(0, 0, 0);
 
 			// Add Scene.
 			scene = new THREE.Scene();
@@ -125,8 +124,7 @@
 			}
 
 			// ページ切り替え
-			startPos = camera.position;  //開始位置
-			moveRatio = 0;
+			move.current = 0;
 			slides();
 		}
 
@@ -140,8 +138,18 @@
 		}
 
 		function render() {
-			const beforeR = radian(page * 15)
-			const afterR = radian((page + 1) * 15)
+			cameraMove();
+			renderer.render(scene, camera);
+
+			if ((move.current * move.increment) <= 1) {
+				move.current++;
+			}
+		}
+
+		function cameraMove() {
+			const angle = 360 / contents.length;
+			const beforeR = radian(page * angle)
+			const afterR = radian((page + 1) * angle)
 			const beforeX = cameraLength * Math.sin(beforeR);
 			const beforeZ = cameraLength * Math.cos(beforeR);
 			const afterX = cameraLength * Math.sin(afterR);
@@ -149,17 +157,13 @@
 
 			const beforePos = new THREE.Vector3(beforeX, 0, beforeZ);
 			const afterPos = new THREE.Vector3(afterX, 0, afterZ);
-			camera.position.copy(beforePos.lerp(afterPos, moveRatio * 0.02));
+			camera.position.copy(beforePos.lerp(afterPos, move.current * move.increment));
 
+
+			console.log(beforePos);
+			console.log(afterPos);
 
 			camera.lookAt(cameraTarget);
-			renderer.render(scene, camera);
-
-			moveRatio += 0.1;
-		}
-
-
-		function pageDetail() {
 		}
 
 
