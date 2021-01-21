@@ -34,7 +34,6 @@
 			{ content: 'https://github.com/kotaoue/brainhack' },
 		];
 		let page = { current: 0, total: contents.length - 1 };
-
 		init();
 		animate();
 		slides();
@@ -70,15 +69,17 @@
 		}
 
 		function addModel(scene) {
-			const scale = 0.03;
+			// add brain
 			const loader = new STLLoader();
 			loader.load('./models/EGJ_brain.stl', function (geometry) {
 				const material = new THREE.MeshNormalMaterial();
 				const mesh = new THREE.Mesh(geometry, material);
 
 				mesh.position.set(0, 0, 0);
-				mesh.scale.set(scale, scale, scale);
 				mesh.rotation.set(Math.PI / 2, Math.PI, 0);
+
+				const scale = 0.03;
+				mesh.scale.set(scale, scale, scale);
 
 				mesh.castShadow = true;
 				mesh.receiveShadow = true;
