@@ -21,7 +21,6 @@
 		let camera, cameraTarget, scene, renderer;
 		let cameraLength = 15;
 
-		let page = 0;
 		let move = { current: 0, increment: 0.02 };
 
 		let contents = [
@@ -34,6 +33,7 @@
 			{ content: '7' },
 			{ content: 'https://github.com/kotaoue/brainhack' },
 		];
+		let page = { current: 0, total: contents.length - 1 };
 
 		init();
 		animate();
@@ -98,13 +98,13 @@
 			const DOM_VK_J = 74;
 			const DOM_VK_K = 75;
 
-			if (event.keyCode === DOM_VK_K && page > 0) {
-				page--;
+			if (event.keyCode === DOM_VK_K && page.current > 0) {
+				page.current--;
 				move.current = 0;
 				slides();
 			}
-			if (event.keyCode === DOM_VK_J && page < contents.length - 1) {
-				page++;
+			if (event.keyCode === DOM_VK_J && page.current < contents.length - 1) {
+				page.current++;
 				move.current = 0;
 				slides();
 			}
@@ -129,22 +129,22 @@
 		}
 
 		function cameraMove() {
-			const angle = 360 / contents.length;
-			const beforeR = radian(page * angle)
-			const afterR = radian((page + 1) * angle)
+			const angle = 360 / page.total;
+			const beforeR = radian(page.current * angle)
+			const afterR = radian((page.current + 1) * angle)
 			const beforeX = cameraLength * Math.sin(beforeR);
 			const beforeZ = cameraLength * Math.cos(beforeR);
 			const afterX = cameraLength * Math.sin(afterR);
 			const afterZ = cameraLength * Math.cos(afterR);
 
-			const beforePos = new THREE.Vector3(beforeX, page, beforeZ);
-			const afterPos = new THREE.Vector3(afterX, (page + 1), afterZ);
+			const beforePos = new THREE.Vector3(beforeX, page.current, beforeZ);
+			const afterPos = new THREE.Vector3(afterX, (page.current + 1), afterZ);
 			camera.position.copy(beforePos.lerp(afterPos, move.current * move.increment));
 			camera.lookAt(cameraTarget);
 		}
 
 		function slides() {
-			document.getElementById("slide").innerHTML = "<p class='text'>" + contents[page].content + "</p>";
+			document.getElementById("slide").innerHTML = "<p class='text'>" + contents[page.current].content + "</p>";
 		}
 	</script>
 </body>
