@@ -19,6 +19,7 @@
 
 		let container, stats;
 		let camera, cameraTarget, scene, renderer;
+		let group;
 		let cameraLength = 15;
 
 		let move = { current: 0, increment: 0.02 };
@@ -88,7 +89,7 @@
 			});
 
 			// add cube
-			const group = new THREE.Group();
+			group = new THREE.Group();
 			scene.add(group);
 
 			const material = new THREE.MeshNormalMaterial();
@@ -137,6 +138,7 @@
 
 		function render() {
 			cameraMove();
+			groupMove();
 			renderer.render(scene, camera);
 
 			if ((move.current * move.increment) <= 1) {
@@ -162,6 +164,25 @@
 			camera.position.copy(beforePos.lerp(afterPos, move.current * move.increment));
 			camera.lookAt(cameraTarget);
 		}
+
+		function groupMove() {
+			const speed = 0.001;
+			group.rotation.x = group.rotation.x + (speed * (page.current % 2));
+			group.rotation.y = group.rotation.y + speed;
+			group.rotation.z = group.rotation.x + (speed * (page.current % 3));
+
+			const rotationMax = Math.PI * 2;
+			if (group.rotation.x < 0 || group.rotation.x > rotationMax) {
+				group.rotation.x = 0;
+			}
+			if (group.rotation.y < 0 || group.rotation.y >= rotationMax) {
+				group.rotation.y = 0;
+			}
+			if (group.rotation.z < 0 || group.rotation.z > rotationMax) {
+				group.rotation.z = 0;
+			}
+		}
+
 
 		function slides() {
 			document.getElementById("slide").innerHTML = "<p class='text'>" + contents[page.current].content + "</p>";
