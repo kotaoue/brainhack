@@ -137,8 +137,8 @@
 			const afterX = cameraLength * Math.sin(afterR);
 			const afterZ = cameraLength * Math.cos(afterR);
 
-			const beforePos = new THREE.Vector3(beforeX, 0, beforeZ);
-			const afterPos = new THREE.Vector3(afterX, 0, afterZ);
+			const beforePos = new THREE.Vector3(beforeX, page, beforeZ);
+			const afterPos = new THREE.Vector3(afterX, (page + 1), afterZ);
 			camera.position.copy(beforePos.lerp(afterPos, move.current * move.increment));
 			camera.lookAt(cameraTarget);
 		}
