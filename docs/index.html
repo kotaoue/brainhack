@@ -25,14 +25,22 @@
 		let move = { current: 0, increment: 0.02 };
 
 		let contents = [
-			{ content: '1' },
-			{ content: '2' },
-			{ content: '3' },
-			{ content: '4' },
-			{ content: '5' },
-			{ content: '6' },
-			{ content: '7' },
-			{ content: 'https://github.com/kotaoue/brainhack' },
+			{ title: '🐓脳を改造して<br>楽しく仕事する💕' },
+			{ content: 'ミーティング後スイッチが入らない<br>昼ごはん食べたらおやつ食べたくなる<br>深夜メンテで寝落ち' },
+			{ content: 'まずは脳改造😁' },
+			{ content: 'その①<br>頑張ってシゴトする' },
+			{ content: 'シゴトする→終わらせる→キモチイイ👌' },
+			{ content: '楽しくなってくる！💖' },
+			{ content: 'その②<br>イケナイコトをする' },
+			{ content: '昼めしの時間削って…<br>今日は予定があるから上がるつもりが…<br>退勤したけどもうちょっと…' },
+			{ content: 'もっと楽しくなってくる！！💖' },
+			{ content: 'その③<br>場所を拡張する' },
+			{ content: '電車の中<br>風呂の中<br>お布団の中' },
+			{ content: 'とっても楽しくなってくる！！！💖' },
+			{ content: '仕事依存症のできあがり！💯' },
+			{ content: '注意点' },
+			{ content: 'もどせない' },
+			{ link: 'https://github.com/kotaoue/brainhack' },
 		];
 		let page = { current: 0, total: contents.length - 1 };
 		init();
@@ -185,7 +193,18 @@
 
 
 		function slides() {
-			document.getElementById("slide").innerHTML = "<p class='text'>" + contents[page.current].content + "</p>";
+			let innerHTML = "";
+			const currentCountent = contents[page.current];
+			if ('title' in currentCountent) {
+				innerHTML += "<span>" + currentCountent.title + "</span>";
+			}
+			if ('content' in currentCountent) {
+				innerHTML += currentCountent.content;
+			}
+			if ('link' in currentCountent) {
+				innerHTML += "<a href='" + currentCountent.link + "'>" + currentCountent.link + "</a>";
+			}
+			document.getElementById("slide").innerHTML = innerHTML;
 		}
 	</script>
 </body>
