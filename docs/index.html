@@ -86,6 +86,25 @@
 
 				scene.add(mesh);
 			});
+
+			// add cube
+			const group = new THREE.Group();
+			scene.add(group);
+
+			const material = new THREE.MeshNormalMaterial();
+			const geometry = new THREE.BoxGeometry(1, 1, 1);
+			const cubeLength = cameraLength / 3;
+			const cubeCount = 16;
+			const cubeAngle = 360 / cubeCount;
+			for (let i = 0; i < cubeCount; i++) {
+				const mesh = new THREE.Mesh(geometry, material);
+				mesh.position.set(cubeLength * Math.cos(radian(cubeAngle * i)), 0, cubeLength * Math.sin(radian(cubeAngle * i)));
+
+				const scale = 0.1;
+				mesh.scale.set(scale, scale, scale);
+
+				group.add(mesh);
+			}
 		}
 
 		function onWindowResize() {
@@ -138,8 +157,8 @@
 			const afterX = cameraLength * Math.sin(afterR);
 			const afterZ = cameraLength * Math.cos(afterR);
 
-			const beforePos = new THREE.Vector3(beforeX, page.current, beforeZ);
-			const afterPos = new THREE.Vector3(afterX, (page.current + 1), afterZ);
+			const beforePos = new THREE.Vector3(beforeX, 0, beforeZ);
+			const afterPos = new THREE.Vector3(afterX, 0, afterZ);
 			camera.position.copy(beforePos.lerp(afterPos, move.current * move.increment));
 			camera.lookAt(cameraTarget);
 		}
