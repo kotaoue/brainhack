@@ -6,7 +6,7 @@ The Brainhack
 
 * [https://kotaoue.github.io/brainhack/](https://kotaoue.github.io/brainhack/)
 
-![Brain visualization rendered with Three.js](docs/screenshot.png)
+![Brain visualization](docs/screenshot.png)
 
 ## References
 
