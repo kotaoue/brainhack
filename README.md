@@ -2,6 +2,13 @@
 
 The Brainhack
 
+## Operations
+
+| Key | Action |
+|-----|--------|
+| `j` | Next page |
+| `k` | Previous page |
+
 ## Result
 
 * [https://kotaoue.github.io/brainhack/](https://kotaoue.github.io/brainhack/)
