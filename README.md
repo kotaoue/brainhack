@@ -13,6 +13,8 @@ The Brainhack
 
 * [https://kotaoue.github.io/brainhack/](https://kotaoue.github.io/brainhack/)
 
+![Brain visualization](docs/screenshot.png)
+
 ## References
 
 * [three.js](https://threejs.org/)
